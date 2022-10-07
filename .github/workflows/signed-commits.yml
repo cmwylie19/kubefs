@@ -1,8 +1,8 @@
 name: Check unsigned commits
 
 on:
-  push:
-    branches: ['*']
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, edited, unlocked, review_requested]
 
 jobs:
 
