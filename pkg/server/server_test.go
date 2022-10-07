@@ -34,4 +34,5 @@ func TestHealthCheckHandler(t *testing.T) {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)
 	}
+	//t
 }
