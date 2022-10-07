@@ -26,13 +26,14 @@ func getServerCommand() *cobra.Command {
 		Short:   "Serve Media Controller",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			s := &server.Server{}
-			return s.Serve(dir, port)
+			return s.Serve(key, cert, dir, port)
 			//		return s.Serve(tlsKey, tlsCert, port)
 		},
 	}
 
-	cmd.PersistentFlags().StringVarP(&dir, "dir", "d", "", "Directory from which to manage files")
-	cmd.PersistentFlags().StringVarP(&port, "port", "p", "", "Port from which to server the webserver")
-
+	cmd.PersistentFlags().StringVarP(&dir, "dir", "d", "/tmp", "Directory from which to manage files")
+	cmd.PersistentFlags().StringVarP(&port, "port", "p", "8080", "Port from which to server the webserver")
+	cmd.PersistentFlags().StringVarP(&key, "key", "", "", "Server private key for TLS encryption.")
+	cmd.PersistentFlags().StringVarP(&cert, "cert", "", "", "Server certificate for TLS encryption")
 	return cmd
 }

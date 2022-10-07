@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -14,19 +15,30 @@ type Server struct {
 }
 
 // key, cert, port, dir string for future use
-func (s *Server) Serve(dir, port string) error {
+func (s *Server) Serve(key, cert, dir, port string) error {
 
 	s.Port = port
 	s.Dir = dir
 
 	http.HandleFunc("/healthz", HealthCheckHandler)
 
-	err := http.ListenAndServe(":"+port, nil)
+	if key != "" && cert != "" {
+		fmt.Printf("Starting server at %s watching directory %s.\n", port, dir)
+		err := http.ListenAndServeTLS(":"+port, cert, key, nil)
+		if err != nil {
 
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
+			log.Fatal("ListenAndServe: ", err)
+			return err
+		}
+	} else {
+		fmt.Printf("Starting server at %s watching directory %s.\n", port, dir)
+		err := http.ListenAndServe(":"+port, nil)
+		if err != nil {
+			log.Fatal("ListenAndServe: ", err)
+
+			return err
+		}
 	}
-
 	return nil
 }
 
