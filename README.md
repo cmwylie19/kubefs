@@ -6,6 +6,7 @@ This project is intended to manage files on a Kubernetes node. It is cloud nativ
 - [CLI](#cli)
 - [Functionalities](#functionalities)
 - [Usage](#usage)
+- [Contribute](CONTRIBUTING.md#label-commits)
 
 ## Original Use Case
 
@@ -17,7 +18,7 @@ This project is built to manage images generated from motion detection alarm of 
 
 - Serve - serves the webserver
 - port - port from which to serve
-- cert - server ceritifcate
+- cert - server certificate
 - key - server private key
 - dir - image directory
 
