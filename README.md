@@ -21,6 +21,36 @@ This project is built to manage images generated from motion detection alarm of 
 - key - server private key
 - dir - image directory
 
+**_example_**:
+
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout cert.key -out cert.crt -subj "/CN=kubefs.earth.milkyway/O=kubefs.earth.milkyway"
+
+
+go run cmd/kubefs/*.go serve -p 8443 --cert cert.crt --key cert.key --dir /tmp
+```
+
+**_output_**:
+```bash
+Starting server at 8443 watching directory /tmp.
+```
+
+**_check server cert_**:  
+while running the webserver in another terminal...
+```bash
+openssl s_client -showcerts -connect localhost:8443 | egrep "subject=CN"
+```
+
+**_output_**:
+```bash
+depth=0 CN = kubefs.earth.milkyway, O = kubefs.earth.milkyway
+verify error:num=18:self-signed certificate
+verify return:1
+depth=0 CN = kubefs.earth.milkyway, O = kubefs.earth.milkyway
+verify return:1
+subject=CN = kubefs.earth.milkyway, O = kubefs.earth.milkyway
+```
+
 
 ## Functionalities
 
