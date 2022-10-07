@@ -8,6 +8,7 @@
   * [Ask for Help](#ask-for-help)
   * [Pull Request Lifecycle](#pull-request-lifecycle)
   * [Development Environment Setup](#development-environment-setup)
+  * [Label Commits](#label-commits)
   * [Sign Your Commits](#sign-your-commits)
   * [Pull Request Checklist](#pull-request-checklist)
 
@@ -77,6 +78,15 @@ The best way to reach us with a question when contributing is to ask on:
 [Instructions](https://contribute.cncf.io/maintainers/github/templates/required/contributing/#development-environment-setup)
 
 - go 1.19
+
+## Label Commits
+
+Label commits as `BUGFIX|DOCS|FEATURE|TASK`
+
+**_example_**:
+```bash
+git commit -s -am 'FEATURE: add customization for server port`
+```
 
 ## Sign Your Commits
 
