@@ -1,0 +1,17 @@
+name: Check unsigned commits
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, edited, unlocked, review_requested]
+
+jobs:
+  check-sign-off:
+    name: Write comment if unsigned commits found
+    env:
+      FORCE_COLOR: 1
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: live627/check-pr-signoff-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
