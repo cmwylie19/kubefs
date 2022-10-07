@@ -5,6 +5,20 @@ on:
     types: [opened, synchronize, reopened, ready_for_review, edited, unlocked, review_requested]
 
 jobs:
+
+  check-commit-message:
+    name: "check-commit-mesage"
+    runs-on: ubuntu-22.04
+    env:
+      FORCE_COLOR: 1
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          pattern: '\[(BUGFIX|DOCS|FEATURE|TASK)\] .+$'
+          error: 'Your first line has to contain a commit type like "[BUGFIX]".'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
+
   check-sign-off:
     name: Write comment if unsigned commits found
     env:
