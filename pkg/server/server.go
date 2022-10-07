@@ -1,6 +1,7 @@
 package server
 
 import (
+	"io"
 	"log"
 	"net/http"
 )
@@ -18,10 +19,7 @@ func (s *Server) Serve(dir, port string) error {
 	s.Port = port
 	s.Dir = dir
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		str := "this works"
-		w.Write([]byte(str))
-	})
+	http.HandleFunc("/healthz", HealthCheckHandler)
 
 	err := http.ListenAndServe(":"+port, nil)
 
@@ -30,4 +28,11 @@ func (s *Server) Serve(dir, port string) error {
 	}
 
 	return nil
+}
+
+func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+
+	io.WriteString(w, `{"alive": true}`)
 }
