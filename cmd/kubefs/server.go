@@ -31,7 +31,7 @@ func getServerCommand() *cobra.Command {
 		},
 	}
 
-	cmd.PersistentFlags().StringVarP(&dir, "dir", "d", "/tmp", "Directory from which to manage files")
+	cmd.PersistentFlags().StringVarP(&dir, "dir", "d", "/tmp", "FTP directory of the IP Camera")
 	cmd.PersistentFlags().StringVarP(&port, "port", "p", "8080", "Port from which to server the webserver")
 	cmd.PersistentFlags().StringVarP(&key, "key", "", "", "Server private key for TLS encryption.")
 	cmd.PersistentFlags().StringVarP(&cert, "cert", "", "", "Server certificate for TLS encryption")

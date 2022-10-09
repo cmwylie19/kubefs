@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 )
 
@@ -21,10 +22,25 @@ type Server struct {
 	Dir  string
 }
 
-// TODO
-// func (s *Server) DeleteFile() error {
+func deleteFile(path string, done chan bool) {
+	defer wg.Done()
+	err := os.Remove(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	done <- true
+}
+func (s *Server) DeleteFile(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	wg.Add(1)
 
-// }
+	done := make(chan bool)
+	go deleteFile(s.Dir+req.URL.Path[12:], done)
+	<-done
+	wg.Wait()
+	fs := fmt.Sprintf(`{"deleted":{"file":"%s"}}`, s.Dir+req.URL.Path[12:])
+	io.WriteString(w, fs)
+}
 
 // key, cert, port, dir string for future use
 func (s *Server) Serve(key, cert, dir, port string) error {
@@ -33,6 +49,7 @@ func (s *Server) Serve(key, cert, dir, port string) error {
 	s.Dir = dir
 
 	http.HandleFunc("/healthz", HealthCheckHandler)
+	http.HandleFunc("/delete/file/", s.DeleteFile)
 	http.HandleFunc("/list", s.ListFiles)
 
 	if key != "" && cert != "" {
