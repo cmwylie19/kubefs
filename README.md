@@ -88,3 +88,16 @@ docker build -t cmwylie19/kubefs build/
 docker push cmwylie19/kubefs
 ```
 
+
+## API
+
+Delete
+```
+curl http://192.168.1.209:30099/delete/file/media/20220930/images/A22093008004710.jpg
+{"deleted":{"file":"/media/media/20220930/images/A22093008004710.jpg"}}%
+```
+
+Length
+```
+curl http://192.168.1.209:30099/list | jq '. | length'
+```
