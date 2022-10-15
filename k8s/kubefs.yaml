@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kubefs
+  name: kubefs
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubefs
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: kubefs
+    spec:
+      volumes:
+      - name: media
+        hostPath:
+          path: /media/db
+      containers:
+      - name: kubefs
+        command:
+        - ./kubefs
+        - serve
+        - -p
+        - "8080"
+        - --dir
+        - /media
+        volumeMounts:
+        - name: media
+          mountPath: /media
+        image: cmwylie19/kubefs
+      serviceAccountName: kubefs
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: null
+  name: kubefs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: kubefs
+  name: kubefs
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30099
+  selector:
+    app: kubefs
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  volumes:
+  - name: media
+    hostPath:
+      path: /media/db
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+    volumeMounts:
+    - name: media
+      mountPath: /media
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

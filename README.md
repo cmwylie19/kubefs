@@ -7,6 +7,7 @@ This project is intended to manage files on a Kubernetes node. It is cloud nativ
 - [Functionalities](#functionalities)
 - [Usage](#usage)
 - [Contribute](CONTRIBUTING.md#label-commits)
+- [Build](#build)
 
 ## Original Use Case
 
@@ -76,3 +77,14 @@ subject=CN = kubefs.earth.milkyway, O = kubefs.earth.milkyway
 * Frontend (React) 
 * Backend (Go 1.19)
   * CLI
+
+## Build
+
+```bash
+GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+mv kubefs build/kubefs
+
+docker build -t cmwylie19/kubefs build/
+docker push cmwylie19/kubefs
+```
+

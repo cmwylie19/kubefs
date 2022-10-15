@@ -47,7 +47,7 @@ func (s *Server) Serve(key, cert, dir, port string) error {
 
 	s.Port = port
 	s.Dir = dir
-
+	http.Handle("/", http.FileServer(http.Dir("/media")))
 	http.HandleFunc("/healthz", HealthCheckHandler)
 	http.HandleFunc("/delete/file/", s.DeleteFile)
 	http.HandleFunc("/list", s.ListFiles)
