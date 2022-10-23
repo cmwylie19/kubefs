@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-
-	// "io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -63,7 +61,7 @@ func (s *Server) Serve(key, cert, dir, port string) error {
 
 	s.Port = port
 	s.Dir = dir
-	http.Handle("/", http.FileServer(http.Dir("/media")))
+	http.Handle("/", http.FileServer(http.Dir("media")))
 	http.HandleFunc("/healthz", EnableCors(HealthCheckHandler))
 	http.HandleFunc("/delete/file/", EnableCors(s.DeleteFile))
 	http.HandleFunc("/list", EnableCors(s.ListFiles))
@@ -141,7 +139,9 @@ func (s *Server) ListFiles(w http.ResponseWriter, r *http.Request) {
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	utils.Logger.Info("Health check")
+	if os.Getenv("ENV") != "CI" {
+		utils.Logger.Info("Health check", zap.String("status", "OK"))
+	}
 
 	io.WriteString(w, `{"alive": true}`)
 }
