@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+
 	"github.com/cmwylie19/kubefs/pkg/utils"
 	"go.uber.org/zap"
 )
@@ -12,7 +13,6 @@ func main() {
 		os.Exit(1)
 	}
 }
-
 
 func init() {
 	utils.InitLogger()
