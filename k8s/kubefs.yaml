@@ -6,7 +6,7 @@ metadata:
   name: kubefs
   namespace: default
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: kubefs
@@ -28,10 +28,10 @@ spec:
         - -p
         - "8080"
         - --dir
-        - /media
+        - /media/db
         volumeMounts:
         - name: media
-          mountPath: /media
+          mountPath: /media/db
         image: cmwylie19/kubefs
       serviceAccountName: kubefs
 ---
