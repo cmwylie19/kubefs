@@ -8,6 +8,7 @@ This project is intended to manage files on a Kubernetes node. It is cloud nativ
 - [Usage](#usage)
 - [Contribute](CONTRIBUTING.md#label-commits)
 - [Build](#build)
+- [API](#api)
 
 ## Original Use Case
 
@@ -84,7 +85,28 @@ subject=CN = kubefs.earth.milkyway, O = kubefs.earth.milkyway
 GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
 mv kubefs build/kubefs
 
-docker build -t cmwylie19/kubefs build/
-docker push cmwylie19/kubefs
+docker build -t cmwylie19/kubefs:cascade build/
+docker push cmwylie19/kubefs:cascade
 ```
 
+
+## API
+
+*Cascade Delete*
+```
+k run curler --image=nginx --rm -i -- curl -sS 'kubefs.kubefs.svc.cluster.local:8080/delete/cascade?begin=A22102313094310.jpg&end=A22102313153810.jpg'
+
+
+curl -sS 'http://192.168.1.209:30099/delete/cascade?begin=A22102900000000.jpg&end=A22102903000000.jpg'
+```
+
+
+*List Files*
+```
+k run curler --image=nginx --rm -i -- curl kubefs.kubefs.svc.cluster.local:8080/list
+```
+
+*Health Check*
+```
+k run curler --image=nginx --rm -i -- curl kubefs.kubefs.svc.cluster.local:8080/healthz
+```

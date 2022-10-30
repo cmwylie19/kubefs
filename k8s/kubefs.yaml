@@ -4,7 +4,7 @@ metadata:
   labels:
     app: kubefs
   name: kubefs
-  namespace: default
+  namespace: kubefs
 spec:
   replicas: 3
   selector:
@@ -32,7 +32,7 @@ spec:
         volumeMounts:
         - name: media
           mountPath: /media/db
-        image: cmwylie19/kubefs
+        image: cmwylie19/kubefs:cascade
       serviceAccountName: kubefs
 ---
 apiVersion: v1
@@ -40,6 +40,7 @@ kind: ServiceAccount
 metadata:
   creationTimestamp: null
   name: kubefs
+  namespace: kubefs
 ---
 apiVersion: v1
 kind: Service
@@ -48,6 +49,7 @@ metadata:
   labels:
     app: kubefs
   name: kubefs
+  namespace: kubefs
 spec:
   type: NodePort
   ports:
@@ -57,26 +59,3 @@ spec:
     nodePort: 30099
   selector:
     app: kubefs
----
-apiVersion: v1
-kind: Pod
-metadata:
-  creationTimestamp: null
-  labels:
-    run: nginx
-  name: nginx
-spec:
-  volumes:
-  - name: media
-    hostPath:
-      path: /media/db
-  containers:
-  - image: nginx
-    name: nginx
-    resources: {}
-    volumeMounts:
-    - name: media
-      mountPath: /media
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
-status: {}
