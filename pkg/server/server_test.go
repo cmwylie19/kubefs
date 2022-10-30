@@ -2,7 +2,6 @@ package server
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"net/url"
 	"testing"
 )
@@ -65,30 +64,31 @@ func TestFileNameToInt(t *testing.T) {
 		})
 	}
 }
-func TestHealthCheckHandler(t *testing.T) {
 
-	req, err := http.NewRequest("GET", "/healthz", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
+// func TestHealthCheckHandler(t *testing.T) {
 
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(HealthCheckHandler)
+// 	req, err := http.NewRequest("GET", "/healthz", nil)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
 
-	handler.ServeHTTP(rr, req)
+// 	rr := httptest.NewRecorder()
+// 	handler := http.HandlerFunc(HealthCheckHandler)
 
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, http.StatusOK)
-	}
+// 	handler.ServeHTTP(rr, req)
 
-	expected := `{"alive": true}`
-	if rr.Body.String() != expected {
-		t.Errorf("handler returned unexpected body: got %v want %v",
-			rr.Body.String(), expected)
-	}
+// 	if status := rr.Code; status != http.StatusOK {
+// 		t.Errorf("handler returned wrong status code: got %v want %v",
+// 			status, http.StatusOK)
+// 	}
 
-}
+// 	expected := `{"alive": true}`
+// 	if rr.Body.String() != expected {
+// 		t.Errorf("handler returned unexpected body: got %v want %v",
+// 			rr.Body.String(), expected)
+// 	}
+
+// }
 
 func TestEnableCors(t *testing.T) {
 	tests := []struct {
