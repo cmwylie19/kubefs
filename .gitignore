@@ -1,3 +1,4 @@
 future
 cert.crt
 cert.key
+.DS_Store
