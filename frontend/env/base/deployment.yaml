@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kubefs
+  name: kubefs
+  namespace: kubefs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kubefs
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: kubefs
+    spec:
+      volumes:
+      - name: media
+        hostPath:
+          path: /media/db
+      containers:
+      - name: kubefs
+        command:
+        - ./kubefs
+        - serve
+        - -p
+        - "8080"
+        - --dir
+        - /media/db
+        volumeMounts:
+        - name: media
+          mountPath: /media/db
+        image: cmwylie19/kubefs:cascade
+      serviceAccountName: kubefs

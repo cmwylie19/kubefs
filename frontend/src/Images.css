@@ -1,0 +1,18 @@
+.image {
+    width: 450px;
+    border: none;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: #1c1c1c 5px 5px 10px;
+ }
+
+ 
+ @media screen and (max-width: 480px) {
+   .image {
+     width: 350px;
+   }
+ } 
+ .image:hover {
+    border: 5px solid red;
+ }
+
