@@ -1,6 +1,6 @@
 # Kubefs
-
-This project is intended to manage files on a Kubernetes node. It is cloud native and built to run in Kubernetes but can run on  a linux VM outside of Kubernetes. 
+![frontend.png](frontend.png)
+This project is intended to manage files on a Kubernetes node (captured from an IP Camera and stored through FTP). It is cloud native and built to run in Kubernetes but can run on  a linux VM outside of Kubernetes. 
 
 - [Original Use case](#original-use-case)
 - [CLI](#cli)
