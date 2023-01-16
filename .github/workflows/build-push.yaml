@@ -1,0 +1,98 @@
+name: Build/Push Action
+# on: [push]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  unit-test-frontend:
+    name: unit-test-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Unit Test Frontend
+        run: | 
+          cd frontend;
+          yarn -s;
+          yarn run test;
+          echo "Exited with '$?'"
+  unit-test-backend:
+    needs: unit-test-frontend
+    name: unit-test-backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Unit Test Backend
+        run: | 
+          cd server;
+          go mod tidy;
+          go test -covermode=atomic -coverprofile=coverage.out -v ./...;
+          echo "Exited with '$?'"
+  setup-build-push-deploy:
+    needs: unit-test-backend
+    name: build-containers-and-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+    
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+    # NEW
+      - name: Set up Kustomize
+        run: |-
+          curl --location https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.2.0/kustomize_v4.2.0_linux_amd64.tar.gz | tar xz
+          chmod u+x ./kustomize
+      # NEW
+      - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+              # Get the GKE credentials so we can deploy to the cluster
+
+      # NEW
+      - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push metrics-frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: ./metrics-frontend
+          push: true
+          tags: cmwylie19/blog-insights-frontend:latest
+
+      - name: Deploy metrics-frontend
+        run: |-
+          kubectl apply -f ./metrics-frontend/k8s
+          kubectl rollout restart deploy/frontend
+      - name: Build and push metrics-backend
+        uses: docker/build-push-action@v2
+        with:
+          context: ./metrics-backend
+          push: true
+          tags: cmwylie19/blog-metrics-backend:latest
+
+      - name: Deploy metrics-backend
+        run: |-
+          kubectl apply -f ./metrics-backend/k8s
+          kubectl rollout restart deploy/insights
+      - run: echo "🍏 This job's status is ${{ job.status }}."

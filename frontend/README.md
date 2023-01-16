@@ -1,5 +1,5 @@
 # Kubefs-Web
-![frontend.png](frontend.png)
+![frontend.png](../frontend.png)
 - [build](#build)
 
 ## Build
