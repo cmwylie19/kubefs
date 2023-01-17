@@ -1,12 +1,36 @@
 name: Test Code on Push
 
 on:
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
+  check-commit-message:
+    name: "check-commit-mesage"
+    runs-on: ubuntu-22.04
+    env:
+      FORCE_COLOR: 1
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          pattern: '\[(BUGFIX|DOCS|FEATURE|TASK)\] .+$'
+          error: 'Your first line has to contain a commit type like "[BUGFIX]".'
+          checkAllCommitMessages: 'true'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
+
+  check-sign-off:
+    needs: "check-commit-message"
+    name: Write comment if unsigned commits found
+    env:
+      FORCE_COLOR: 1
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: live627/check-pr-signoff-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     runs-on: ubuntu-22.04
