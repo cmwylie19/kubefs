@@ -1,8 +1,11 @@
 name: Test Code on Push
 
 on:
-  # push:
-  #   branches: [ "main" ]
+  # workflow_run:
+  #   workflows: ["Check unsigned commits"]
+  #   branches: [main]
+  #   types: 
+  #     - completed
   pull_request:
     branches: [ "main" ]
 
