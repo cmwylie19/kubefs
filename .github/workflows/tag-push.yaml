@@ -62,9 +62,9 @@ jobs:
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
-  setup-build-push-deploy:
+  build-images-and-patch:
     needs: build-backend
-    name: build-containers-and-deploy
+    name: build-images-and-patch
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -130,10 +130,11 @@ jobs:
 
           sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yml > frontend/env/overlays/stage/version.yml
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
   push-to-git:
     name: push-to-git
     runs-on: ubuntu-latest
-    needs: build-containers-and-deploy
+    needs: build-images-and-patch
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
