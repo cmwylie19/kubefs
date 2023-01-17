@@ -22,7 +22,6 @@ jobs:
       run: |- 
           cd server;
           GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-
     - name: Test
       run: |-
           cd server;
