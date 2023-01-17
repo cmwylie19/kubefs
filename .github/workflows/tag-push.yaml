@@ -16,8 +16,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+        
       - name: Set up Node.js
         uses: actions/setup-node@v3
+
       - name: Unit Test Frontend
         run: | 
           cd frontend;
@@ -154,16 +156,16 @@ jobs:
         with:
           author_name: Casey Wylie
           author_email: cmwylie19@gmail.com
-          message: '[TASK] Updating staging images'
+          message: '[TASK] Bumping frontend image version'
           add: 'frontend/env/overlays/stage/version.yml'
 
-      - name: Update backend version
+      - name: Update server version
         uses: EndBug/add-and-commit@v9
         with:
           author_name: Casey Wylie
           author_email: cmwylie19@gmail.com
-          message: '[TASK] Updating staging images'
-          add: 'frontend/env/overlays/stage/version.yml'
+          message: '[TASK] Bumping server image version'
+          add: 'server/env/overlays/stage/version.yml'
           push: true
           tag: '${{ env.RELEASE_VERSION }} --force'
           tag_push: '--force'
