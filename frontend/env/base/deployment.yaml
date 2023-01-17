@@ -1,37 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  creationTimestamp: null
   labels:
-    app: kubefs
-  name: kubefs
+    app: kubefs-web
+  name: kubefs-web
   namespace: kubefs
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: kubefs
+      app: kubefs-web
   strategy: {}
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        app: kubefs
+        app: kubefs-web
     spec:
-      volumes:
-      - name: media
-        hostPath:
-          path: /media/db
       containers:
-      - name: kubefs
-        command:
-        - ./kubefs
-        - serve
-        - -p
-        - "8080"
-        - --dir
-        - /media/db
-        volumeMounts:
-        - name: media
-          mountPath: /media/db
-        image: cmwylie19/kubefs:cascade
-        imagePullPolicy: IfNotPresent
-      serviceAccountName: kubefs
+      - image: cmwylie19/kubefs-web
+        name: kubefs-web
+        ports:
+        - containerPort: 80
+        resources: {}

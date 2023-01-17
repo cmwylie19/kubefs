@@ -2,10 +2,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-deployment
+  name: kubefs
 spec:
   template:
     spec:
       containers:
-      - name: webserver-simple
-        image: docker.io/kostiscodefresh/simple-env-app:1.0
+      - name: kubefs
+        image: docker.io/cmwylie19/kubefs:0.0.1
