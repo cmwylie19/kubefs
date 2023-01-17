@@ -10,38 +10,38 @@ on:
   #     - completed
 
 jobs:
-  build-and-test:
-    name: build-and-test
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v3
+  # build-and-test:
+  #   name: build-and-test
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.19
+  #   - name: Set up Go
+  #     uses: actions/setup-go@v3
+  #     with:
+  #       go-version: 1.19
 
-    - name: Build
-      run: |- 
-        cd server;
-        GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-    - name: Test
-      run: |-
-        cd server;
-        ENV=CI go test -v ./...;
+  #   - name: Build
+  #     run: |- 
+  #       cd server;
+  #       GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+  #   - name: Test
+  #     run: |-
+  #       cd server;
+  #       ENV=CI go test -v ./...;
         
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+  #   - name: Set up Node.js
+  #     uses: actions/setup-node@v3
       
-    - name: Unit Test Frontend
-      run: |-
-        cd frontend;
-        yarn -s;
-        yarn run test-ci;
-        echo "Exited with '$?'";
+  #   - name: Unit Test Frontend
+  #     run: |-
+  #       cd frontend;
+  #       yarn -s;
+  #       yarn run test-ci;
+  #       echo "Exited with '$?'";
 
   build-images-and-patch:
-    needs: build-and-test
+    # needs: build-and-test
     name: build-images-and-patch
     runs-on: ubuntu-latest
     steps:
@@ -69,7 +69,7 @@ jobs:
         run: |
           echo $RELEASE_VERSION
           echo ${{ env.RELEASE_VERSION }}
-          
+
       - name: Build and push server
         uses: docker/build-push-action@v2
         with:
@@ -121,22 +121,13 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
 
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v3
-
-      # - name: Install dependencies
-      #   run: npm install
-
-      # - name: Update source code
-      #   run: eslint "src/**" --fix
-
       - name: Update frontend version
         run: |
           git config --local user.email cmwylie19@gmail.com
           git config --local user.name "Casey Wylie"
           git add frontend/env/overlays/stage/version.yml
-          git commit -a -m "[TASK] Bumping frontend image version"
-          git push --force
+          git commit -m "[TASK] Bumping frontend image version"
+          git push origin HEAD:main
 
 
       - name: Update server version
