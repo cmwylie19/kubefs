@@ -33,4 +33,5 @@ spec:
         - name: media
           mountPath: /media/db
         image: cmwylie19/kubefs:cascade
+        imagePullPolicy: IfNotPresent
       serviceAccountName: kubefs
