@@ -16,7 +16,7 @@ jobs:
         run: | 
           cd frontend;
           yarn -s;
-          yarn run test;
+          yarn run test-ci;
           echo "Exited with '$?'"
 
   unit-test-backend:
