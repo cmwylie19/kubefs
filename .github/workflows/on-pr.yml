@@ -8,7 +8,9 @@ on:
   #     - completed
   pull_request:
     branches: [ "main" ]
-
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review, edited, unlocked, review_requested]
+    
 jobs:
   check-commit-message:
     name: "check-commit-mesage"
