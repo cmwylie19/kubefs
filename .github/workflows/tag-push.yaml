@@ -138,4 +138,4 @@ jobs:
           git commit -m '[TASK] Bumping server image version'
           git push origin HEAD:main --force
           git tag ${{ env.RELEASE_VERSION }} --force
-          git push HEAD:main --tags --force
+          git push origin HEAD:main --tags --force
