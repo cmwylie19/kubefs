@@ -10,57 +10,34 @@ on:
   #     - completed
 
 jobs:
-  unit-test-frontend:
-    name: unit-test-frontend
-    runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-22.04
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
+
+    - name: Build
+      run: |- 
+        cd server;
+        GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+    - name: Test
+      run: |-
+        cd server;
+        ENV=CI go test -v ./...;
         
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-
-      - name: Unit Test Frontend
-        run: | 
-          cd frontend;
-          yarn -s;
-          yarn run test-ci;
-          echo "Exited with '$?'"
-
-  unit-test-backend:
-    needs: unit-test-frontend
-    name: unit-test-backend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: Unit Test Backend
-        run: | 
-          cd server;
-          go mod tidy;
-          ENV=CI go test -v ./...;
-          echo "Exited with '$?'"
-
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-
-  build-backend:
-    needs: unit-test-backend
-    name: build-backend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-
-      - name: build binary
-        run: | 
-          cd server;
-          go mod tidy;
-          GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-          mv kubefs build/kubefs
-          echo "Exited with '$?'"
-
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      
+    - name: Unit Test Frontend
+      run: |-
+        cd frontend;
+        yarn -s;
+        yarn run test-ci;
+        echo "Exited with '$?'";
 
   build-images-and-patch:
     needs: build-backend
