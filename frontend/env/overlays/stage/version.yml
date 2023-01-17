@@ -9,3 +9,5 @@ spec:
       containers:
       - name: kubefs-web
         image: docker.io/cmwylie19/kubefs-web:0.0.1
+
+
