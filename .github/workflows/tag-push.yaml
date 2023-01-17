@@ -70,20 +70,20 @@ jobs:
           echo $RELEASE_VERSION
           echo ${{ env.RELEASE_VERSION }}
 
-      - name: Build and push server
-        uses: docker/build-push-action@v2
-        with:
-          context: ./server/build
-          push: true
-          tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
+      # - name: Build and push server
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./server/build
+      #     push: true
+      #     tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
 
 
-      - name: Build and push frontend
-        uses: docker/build-push-action@v2
-        with:
-          context: ./frontend
-          push: true
-          tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
+      # - name: Build and push frontend
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./frontend
+      #     push: true
+      #     tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
 
       - name: update server source
         run: | 
@@ -138,4 +138,4 @@ jobs:
           git commit -m '[TASK] Bumping server image version'
           git push origin HEAD:main --force
           git tag ${{ env.RELEASE_VERSION }} --force
-          git push origin main --tags --force
+          git push HEAD:main --tags --force
