@@ -20,6 +20,7 @@ jobs:
           accessToken: ${{ secrets.GITHUB_TOKEN }}
 
   check-sign-off:
+    needs: "check-commit-message"
     name: Write comment if unsigned commits found
     env:
       FORCE_COLOR: 1

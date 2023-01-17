@@ -1,9 +1,6 @@
-name: Unit Test Action
+name: Run Tests
 # on: [push]
 on:
-  push:
-    branches: [ "*" ]
-    tags: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -35,6 +32,24 @@ jobs:
           cd server;
           go mod tidy;
           ENV=CI go test -v ./...;
+          echo "Exited with '$?'"
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  build-backend:
+    needs: unit-test-backend
+    name: build-backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: build binary
+        run: | 
+          cd server;
+          go mod tidy;
+          GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+          mv kubefs build/kubefs
           echo "Exited with '$?'"
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
