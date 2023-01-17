@@ -145,5 +145,5 @@ jobs:
           add: 'version.yml'
           push: true
           cwd: './server/env/overlays/stage/'
-          tag: '${{ env.RELEASE_VERSION }} --force'
-          tag_push: '--force'
+          # tag: '${{ env.RELEASE_VERSION }} --force'
+          # tag_push: '--force'
