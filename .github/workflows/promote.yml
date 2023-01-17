@@ -50,11 +50,13 @@ jobs:
 
       - name: Copy server container tag
         if:  ${{ inputs.promote_container }}
-        uses: canastro/copy-file-action@master
-        with:
-          source: "server/env/overlays/${{ inputs.source_env }}/version.yml"
-          target: "server/env/overlays/${{ inputs.target_env }}/version.yml"
+        run: |
+          mv server/env/overlays/${{ inputs.source_env }}/version.yml server/env/overlays/${{ inputs.target_env }}/version.yml
 
+      - name: Copy frontend container tag
+        if:  ${{ inputs.promote_container }}
+        run: |
+          mv frontend/env/overlays/${{ inputs.source_env }}/version.yml frontend/env/overlays/${{ inputs.target_env }}/version.yml
       # - name: Copy frontend container tag
       #   if:  ${{ inputs.promote_container }}
       #   uses: canastro/copy-file-action@master

@@ -1,4 +1,4 @@
-name: Build/Push Action
+name: On Tag
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Test Code on Push
+name: On PR
 
 on:
   # workflow_run:
