@@ -69,6 +69,7 @@ jobs:
         run: |
           echo $RELEASE_VERSION
           echo ${{ env.RELEASE_VERSION }}
+          
       - name: Build and push server
         uses: docker/build-push-action@v2
         with:
@@ -135,32 +136,8 @@ jobs:
           git config --local user.name "Casey Wylie"
           git add frontend/env/overlays/stage/version.yml
           git commit -a -m "[TASK] Bumping frontend image version"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          force: true
-          tags: true
+          git push --force
 
-
-        # run: |- 
-        #   git config user.name "Casey Wylie"
-        #   git config user.email cmwylie19@gmail.com
-        #   git checkout -b temp
-        #   git add frontend/env/overlays/stage/version.yml
-        #   git commit -m '[TASK] Bumping frontend image version'
-        #   git checkout main
-        #   git merge temp
-        #   git push origin main
-
-
-        # with:
-        #   author_name: Casey Wylie
-        #   author_email: cmwylie19@gmail.com
-        #   message: '[TASK] Bumping frontend image version'
-        #   add: 'version.yml'
-        #   cwd: './frontend/env/overlays/stage/'
 
       - name: Update server version
         run: |- 
