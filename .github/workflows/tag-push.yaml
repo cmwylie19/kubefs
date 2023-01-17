@@ -93,7 +93,8 @@ jobs:
 
 
 
-          sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yml > server/env/overlays/stage/version.yml
+          sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yml > server/env/overlays/stage/version1.yml
+          mv server/env/overlays/stage/version1.yml server/env/overlays/stage/version.yml
 
       - name: update frontend source
         run: | 
@@ -106,7 +107,9 @@ jobs:
 
 
 
-          sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yml > frontend/env/overlays/stage/version.yml
+          sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yml > frontend/env/overlays/stage/version1.yml
+          mv frontend/env/overlays/stage/version1.yml frontend/env/overlays/stage/version.yml
+          
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
   push-to-git:
