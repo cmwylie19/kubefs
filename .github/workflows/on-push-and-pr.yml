@@ -20,20 +20,20 @@ jobs:
 
     - name: Build
       run: |- 
-          cd server;
-          GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+        cd server;
+        GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
     - name: Test
       run: |-
-          cd server;
-          ENV=CI go test -v ./...;
+        cd server;
+        ENV=CI go test -v ./...;
         
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        
-      - name: Unit Test Frontend
-        run: |-
-          cd frontend;
-          yarn -s;
-          yarn run test;
-          echo "Exited with '$?'";
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      
+    - name: Unit Test Frontend
+      run: |-
+        cd frontend;
+        yarn -s;
+        yarn run test;
+        echo "Exited with '$?'";
 
