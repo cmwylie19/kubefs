@@ -130,22 +130,34 @@ jobs:
       #   run: eslint "src/**" --fix
 
       - name: Update frontend version
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: Casey Wylie
-          author_email: cmwylie19@gmail.com
-          message: '[TASK] Bumping frontend image version'
-          add: 'version.yml'
-          cwd: './frontend/env/overlays/stage/'
+        run: |- 
+          git config user.name "Casey Wylie"
+          git config user.email cmwylie19@gmail.com
+          git checkout -b temp
+          git add frontend/env/overlays/stage/version.yml
+          git commit -m '[TASK] Bumping frontend image version'
+          git checkout main
+          git merge temp
+          git push origin main
+
+
+        # with:
+        #   author_name: Casey Wylie
+        #   author_email: cmwylie19@gmail.com
+        #   message: '[TASK] Bumping frontend image version'
+        #   add: 'version.yml'
+        #   cwd: './frontend/env/overlays/stage/'
 
       - name: Update server version
         uses: EndBug/add-and-commit@v9
-        with:
-          author_name: Casey Wylie
-          author_email: cmwylie19@gmail.com
-          message: '[TASK] Bumping server image version'
-          add: 'version.yml'
-          push: true
-          cwd: './server/env/overlays/stage/'
-          # tag: '${{ env.RELEASE_VERSION }} --force'
-          # tag_push: '--force'
+        run: |- 
+          git config user.name "Casey Wylie"
+          git config user.email cmwylie19@gmail.com
+          git checkout -b temp1
+          git add server/env/overlays/stage/version.yml
+          git commit -m '[TASK] Bumping server image version'
+          git checkout main
+          git merge temp1
+          git push origin main
+          git tag ${{ env.RELEASE_VERSION }} --force
+          git push origin main --tags --force
