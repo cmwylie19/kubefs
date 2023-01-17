@@ -19,12 +19,12 @@ jobs:
         go-version: 1.19
 
     - name: Build
-      run: | 
-        cd server;
-        GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs;
+      run: |- 
+          cd server;
+          GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
 
     - name: Test
-      run: |
+      run: |-
           cd server;
           ENV=CI go test -v ./...;
         
@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-node@v3
         
       - name: Unit Test Frontend
-        run: | 
+        run: |-
           cd frontend;
           yarn -s;
           yarn run test;
