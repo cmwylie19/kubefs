@@ -109,7 +109,7 @@ jobs:
 
           sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yml > frontend/env/overlays/stage/version1.yml
           mv frontend/env/overlays/stage/version1.yml frontend/env/overlays/stage/version.yml
-          
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
   push-to-git:
@@ -139,7 +139,8 @@ jobs:
           author_name: Casey Wylie
           author_email: cmwylie19@gmail.com
           message: '[TASK] Bumping frontend image version'
-          add: 'frontend/env/overlays/stage/version.yml'
+          add: 'version.yml'
+          cwd: './frontend/env/overlays/stage/'
 
       - name: Update server version
         uses: EndBug/add-and-commit@v9
@@ -147,7 +148,8 @@ jobs:
           author_name: Casey Wylie
           author_email: cmwylie19@gmail.com
           message: '[TASK] Bumping server image version'
-          add: 'server/env/overlays/stage/version.yml'
+          add: 'version.yml'
           push: true
+          cwd: './server/env/overlays/stage/'
           tag: '${{ env.RELEASE_VERSION }} --force'
           tag_push: '--force'
