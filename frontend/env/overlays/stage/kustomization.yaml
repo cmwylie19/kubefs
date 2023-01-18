@@ -7,7 +7,6 @@ resources:
 - ../../base
 
 patchesStrategicMerge:
-- deployment.yaml
 - version.yaml
 
 

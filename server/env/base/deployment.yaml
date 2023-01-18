@@ -4,7 +4,6 @@ metadata:
   labels:
     app: kubefs
   name: kubefs
-  namespace: kubefs
 spec:
   replicas: 3
   selector:
@@ -32,6 +31,6 @@ spec:
         volumeMounts:
         - name: media
           mountPath: /media/db
-        image: cmwylie19/kubefs:v0.0.1
+        image: cmwylie19/kubefs:latest
         imagePullPolicy: IfNotPresent
       serviceAccountName: kubefs

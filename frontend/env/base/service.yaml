@@ -5,7 +5,6 @@ metadata:
     app: kubefs-web
     version: v1
   name: kubefs-web
-  namespace: kubefs
 spec:
   ports:
     - port: 80
