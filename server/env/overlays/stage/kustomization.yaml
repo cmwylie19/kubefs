@@ -8,6 +8,6 @@ resources:
 
 
 patchesStrategicMerge:
-- deployment.yml
-- version.yml
+- deployment.yaml
+- version.yaml
 

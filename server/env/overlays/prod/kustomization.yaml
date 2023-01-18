@@ -3,11 +3,11 @@ kind: Kustomization
 
 namespace: kubefs
 
+
 resources:
 - ../../base
 
+
 patchesStrategicMerge:
-- deployment.yml
-- version.yml
-
-
+- deployment.yaml
+- version.yaml
