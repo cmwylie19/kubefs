@@ -1,0 +1,11 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubefs
+spec:
+  template:
+    spec:
+      containers:
+      - name: kubefs
+        image: docker.io/cmwylie19/kubefs:0.0.1
