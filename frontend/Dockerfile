@@ -1,5 +1,5 @@
 # Frontend UI running in NGINX
-FROM node:18 AS builder
+FROM arm64v8/node AS builder
 LABEL description="KubeFS-Web" \
       maintainer="Casey Wylie casewylie@gmail.com"
 # Set working directory
