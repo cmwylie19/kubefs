@@ -61,7 +61,8 @@ jobs:
       - name: Update Frontend Image Tag to remove Stage
         if: inputs.target_env == 'prod'
         run: | 
-          sed 's/-stage//g' frontend/env/overlays/prod/version.yaml > frontend/env/overlays/prod/version.yaml
+          sed 's/-stage//g' frontend/env/overlays/prod/version.yaml > frontend/env/overlays/prod/version1.yaml
+          mv frontend/env/overlays/prod/version1.yaml frontend/env/overlays/prod/version.yaml 
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
