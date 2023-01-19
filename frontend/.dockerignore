@@ -3,3 +3,7 @@ npm-debug.log
 **/.git
 **/.DS_Store
 **/node_modules
+env
+*env
+env/
+k8s/
