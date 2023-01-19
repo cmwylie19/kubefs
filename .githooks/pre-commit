@@ -1,7 +1,0 @@
-#!/bin/sh
-
-echo "Building Server Binary..."
-cd ../server;
-GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-mv kubefs build/kubefs
-echo "Server Binary Built..."
