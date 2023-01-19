@@ -1,8 +1,9 @@
 name: On Tag
 
 on:
-  push:
-    tags: ["*"]
+  create:
+  # push:
+  #   tags: ["*"]
   # workflow_run:
   #   workflows: ["Run Tests"]
   #   branches: [main]
