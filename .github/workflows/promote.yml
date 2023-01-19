@@ -1,6 +1,4 @@
-# Promote a GitOps application from one environment to the next
-
-name: Promote application
+name: On Promote
 
 # Controls when the workflow will run
 on:
@@ -28,10 +26,6 @@ on:
         required: true 
         type: boolean 
         default: 'true'
-      # promote_configmaps:
-      #   description: 'Also cut a release?'
-      #   required: true 
-      #   type: boolean 
       messsage:
         description: 'Commit message'
         required: true 
@@ -56,8 +50,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+
       - name: Set Env for CURRENT_TAG 
-        run: echo "CURRENT_TAG=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1' | sed 's/docker.io\/cmwylie19\/kubefs-web://g')" >> $GITHUB_ENV 
+        run: |
+          echo "CURRENT_TAG=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1' | sed 's/docker.io\/cmwylie19\/kubefs-web://g')" >> $GITHUB_ENV 
 
      - name: Set Prod URL in Frontend source code
        run: |
