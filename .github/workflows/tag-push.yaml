@@ -70,7 +70,7 @@ jobs:
           echo $RELEASE_VERSION
           echo ${{ env.RELEASE_VERSION }}
 
-      - name: Build and push server
+      - name: Build and push server image
         uses: docker/build-push-action@v2
         with:
           context: ./server/build
@@ -78,16 +78,16 @@ jobs:
           tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
 
 
-      - name: Build and push frontend
+      - name: Build and push frontend image
         uses: docker/build-push-action@v2
         with:
           context: ./frontend
           push: true
           tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
 
-      - name: update server source
+      - name: update server container image
         run: | 
-          IMAGE=$(cat server/env/overlays/stage/version.yml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
+          IMAGE=$(cat server/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
           NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION})
 
           # Insert backslash
@@ -96,12 +96,12 @@ jobs:
 
 
 
-          sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yml > server/env/overlays/stage/version1.yml
-          mv server/env/overlays/stage/version1.yml server/env/overlays/stage/version.yml
+          sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yaml > server/env/overlays/stage/version1.yaml
+          mv server/env/overlays/stage/version1.yaml server/env/overlays/stage/version.yaml
 
-      - name: update frontend source
+      - name: update frontend container image
         run: | 
-          IMAGE=$(cat frontend/env/overlays/stage/version.yml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
+          IMAGE=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
           NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION})
 
           # Insert backslash
@@ -110,8 +110,8 @@ jobs:
 
 
 
-          sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yml > frontend/env/overlays/stage/version1.yml
-          mv frontend/env/overlays/stage/version1.yml frontend/env/overlays/stage/version.yml
+          sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yaml > frontend/env/overlays/stage/version1.yaml
+          mv frontend/env/overlays/stage/version1.yaml frontend/env/overlays/stage/version.yaml
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
@@ -125,7 +125,7 @@ jobs:
         run: |
           git config --local user.email cmwylie19@gmail.com
           git config --local user.name "Casey Wylie"
-          git add frontend/env/overlays/stage/version.yml
+          git add frontend/env/overlays/stage/version.yaml
           git commit --allow-empty -m "[TASK] Bumping frontend image version"
           git push origin HEAD:main --force
 
@@ -134,7 +134,7 @@ jobs:
         run: |- 
           git config user.name "Casey Wylie"
           git config user.email cmwylie19@gmail.com
-          git add server/env/overlays/stage/version.yml
+          git add server/env/overlays/stage/version.yaml
           git commit --allow-empty -m '[TASK] Bumping server image version'
           git push origin HEAD:main --force
           git tag ${{ env.RELEASE_VERSION }} --force
