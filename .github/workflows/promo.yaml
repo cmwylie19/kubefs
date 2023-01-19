@@ -44,13 +44,25 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Copy container tag
+      - name: Copy Frontend container tag
         if:  ${{ inputs.promote_container }}
         uses: canastro/copy-file-action@master
         with:
           source: "frontend/env/overlays/${{ inputs.source_env }}/version.yml"
           target: "frontend/env/overlays/${{ inputs.target_env }}/version.yml"
+
+      - name: Copy Server container tag
+        if:  ${{ inputs.promote_container }}
+        uses: canastro/copy-file-action@master
+        with:
+          source: "server/env/overlays/${{ inputs.source_env }}/version.yml"
+          target: "server/env/overlays/${{ inputs.target_env }}/version.yml"
        
+      - name: Update Frontend Image Tag to remove Stage
+        if: inputs.target_env == 'prod'
+        run: | 
+          sed 's/-stage//g' frontend/env/overlays/prod/version.yaml > frontend/env/overlays/prod/version.yaml
+
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ inputs.messsage }}    
