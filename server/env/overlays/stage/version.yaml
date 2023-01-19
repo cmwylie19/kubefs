@@ -8,4 +8,4 @@ spec:
     spec:
       containers:
       - name: kubefs
-        image: docker.io/cmwylie19/kubefs:0.0.3
+        image: docker.io/cmwylie19/kubefs:0.0.4
