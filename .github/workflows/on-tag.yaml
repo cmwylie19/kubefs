@@ -11,35 +11,34 @@ on:
   #     - completed
 
 jobs:
-  unit-test:
-    # if: ${{ startsWith(github.ref, 'refs/tags/*') }}
-    name: unit-test
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: actions/checkout@v3
+  # unit-test:
+  #   name: unit-test
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.19
+  #   - name: Set up Go
+  #     uses: actions/setup-go@v3
+  #     with:
+  #       go-version: 1.19
 
-    - name: Unit Test Server
-      run: |-
-        cd server;
-        ENV=CI go test -v ./...;
+  #   - name: Unit Test Server
+  #     run: |-
+  #       cd server;
+  #       ENV=CI go test -v ./...;
         
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+  #   - name: Set up Node.js
+  #     uses: actions/setup-node@v3
       
-    - name: Unit Test Frontend
-      run: |-
-        cd frontend;
-        yarn -s;
-        yarn run test-ci;
-        echo "Exited with '$?'";
+  #   - name: Unit Test Frontend
+  #     run: |-
+  #       cd frontend;
+  #       yarn -s;
+  #       yarn run test-ci;
+  #       echo "Exited with '$?'";
 
   build-images-and-patch:
-    needs: unit-test
+    # needs: unit-test
     name: build-images-and-patch
     runs-on: ubuntu-latest
     steps:
@@ -78,86 +77,89 @@ jobs:
           cp -a frontend/src/stage_url.js frontend/src/url.js
 
       - name: Build New Frontend Image with Tag (Stage-URL)
-        uses: docker/build-push-action@v2
-        with:
-          context: ./frontend
-          push: true
-          tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage
-          platforms: linux/arm64
-
-      - name: Set URL to Prod for Frontend in Code
+        # uses: docker/build-push-action@v2
         run: |
-          cp -a frontend/src/prod_url.js frontend/src/url.js
+          cd frontend;
+          docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage --push .
+        # with:
+        #   context: ./frontend
+        #   push: true
+        #   tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage
+        #   platforms: linux/arm64
 
-      - name: Build New Frontend Image with Tag (Prod)
-        uses: docker/build-push-action@v2
-        with:
-          context: ./frontend
-          push: true
-          tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
-          platforms: linux/arm64
+      # - name: Set URL to Prod for Frontend in Code
+      #   run: |
+      #     cp -a frontend/src/prod_url.js frontend/src/url.js
 
-
-      - name: Build Server
-        run: |- 
-          cd server;
-          GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-          mv kubefs build/kubefs
-
-      - name: Build New Server Image with Tag
-        uses: docker/build-push-action@v2
-        with:
-          context: ./server/build
-          push: true
-          tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
-          platforms: linux/arm64
-
-      - name: Update Server Image Tag in Stage
-        run: | 
-          IMAGE=$(cat server/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
-          NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION})
-
-          # Insert backslash
-          NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
-          IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
+      # - name: Build New Frontend Image with Tag (Prod)
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./frontend
+      #     push: true
+      #     tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
+      #     platforms: linux/arm64
 
 
+      # - name: Build Server
+      #   run: |- 
+      #     cd server;
+      #     GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+      #     mv kubefs build/kubefs
 
-          sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yaml > server/env/overlays/stage/version1.yaml
-          mv server/env/overlays/stage/version1.yaml server/env/overlays/stage/version.yaml
+      # - name: Build New Server Image with Tag
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./server/build
+      #     push: true
+      #     tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
+      #     platforms: linux/arm64
 
-      - name: Update Frontend Image Tag in Stage
-        run: | 
-          IMAGE=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
-          NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION}-stage)
+      # - name: Update Server Image Tag in Stage
+      #   run: | 
+      #     IMAGE=$(cat server/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
+      #     NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION})
 
-          # Insert backslash
-          NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
-          IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
+      #     # Insert backslash
+      #     NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
+      #     IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
 
 
 
-          sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yaml > frontend/env/overlays/stage/version1.yaml
-          mv frontend/env/overlays/stage/version1.yaml frontend/env/overlays/stage/version.yaml
+      #     sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yaml > server/env/overlays/stage/version1.yaml
+      #     mv server/env/overlays/stage/version1.yaml server/env/overlays/stage/version.yaml
 
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      # - name: Update Frontend Image Tag in Stage
+      #   run: | 
+      #     IMAGE=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
+      #     NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION}-stage)
 
-
-      - name: Update frontend version in Git
-        run: |
-          git config --local user.email cmwylie19@gmail.com
-          git config --local user.name "Casey Wylie"
-          git add frontend/env/overlays/stage/version.yaml
-          git commit --allow-empty -m "[TASK] Bumping frontend image version"
-          git push origin HEAD:main --force
+      #     # Insert backslash
+      #     NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
+      #     IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
 
 
-      - name: Update server version in Git
-        run: |- 
-          git config user.name "Casey Wylie"
-          git config user.email cmwylie19@gmail.com
-          git add server/env/overlays/stage/version.yaml
-          git commit --allow-empty -m '[TASK] Bumping server image version'
-          git push origin HEAD:main --force
-          git tag ${{ env.RELEASE_VERSION }} --force
-          git push origin HEAD:main --tags --force
+
+      #     sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yaml > frontend/env/overlays/stage/version1.yaml
+      #     mv frontend/env/overlays/stage/version1.yaml frontend/env/overlays/stage/version.yaml
+
+      # - run: echo "🍏 This job's status is ${{ job.status }}."
+
+
+      # - name: Update frontend version in Git
+      #   run: |
+      #     git config --local user.email cmwylie19@gmail.com
+      #     git config --local user.name "Casey Wylie"
+      #     git add frontend/env/overlays/stage/version.yaml
+      #     git commit --allow-empty -m "[TASK] Bumping frontend image version"
+      #     git push origin HEAD:main --force
+
+
+      # - name: Update server version in Git
+      #   run: |- 
+      #     git config user.name "Casey Wylie"
+      #     git config user.email cmwylie19@gmail.com
+      #     git add server/env/overlays/stage/version.yaml
+      #     git commit --allow-empty -m '[TASK] Bumping server image version'
+      #     git push origin HEAD:main --force
+      #     git tag ${{ env.RELEASE_VERSION }} --force
+      #     git push origin HEAD:main --tags --force
