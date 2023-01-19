@@ -1,6 +1,6 @@
 # Promote a GitOps application from one environment to the next
 
-name: Promo application
+name: On Promo
 
 # Controls when the workflow will run
 on:
@@ -48,15 +48,15 @@ jobs:
         if:  ${{ inputs.promote_container }}
         uses: canastro/copy-file-action@master
         with:
-          source: "frontend/env/overlays/${{ inputs.source_env }}/version.yml"
-          target: "frontend/env/overlays/${{ inputs.target_env }}/version.yml"
+          source: "frontend/env/overlays/${{ inputs.source_env }}/version.yaml"
+          target: "frontend/env/overlays/${{ inputs.target_env }}/version.yaml"
 
       - name: Copy Server container tag
         if:  ${{ inputs.promote_container }}
         uses: canastro/copy-file-action@master
         with:
-          source: "server/env/overlays/${{ inputs.source_env }}/version.yml"
-          target: "server/env/overlays/${{ inputs.target_env }}/version.yml"
+          source: "server/env/overlays/${{ inputs.source_env }}/version.yaml"
+          target: "server/env/overlays/${{ inputs.target_env }}/version.yaml"
        
       - name: Update Frontend Image Tag to remove Stage
         if: inputs.target_env == 'prod'
