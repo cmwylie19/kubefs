@@ -112,7 +112,7 @@ jobs:
         run: |
           cd server;
 
-          docker build --platform linux/arm64 -t cmwylie19/kubefs:${{ env.RELEASE_VERSION }} build/;
+          docker build --platform linux/arm64/v8 -t cmwylie19/kubefs:${{ env.RELEASE_VERSION }} build/;
           docker push cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
         # with:
         #   context: ./server/build
