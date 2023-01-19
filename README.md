@@ -85,8 +85,8 @@ subject=CN = kubefs.earth.milkyway, O = kubefs.earth.milkyway
 GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
 mv kubefs build/kubefs
 
-docker build -t cmwylie19/kubefs:cascade build/
-docker push cmwylie19/kubefs:cascade
+docker build -t cmwylie19/kubefs:0.0.1 build/
+docker push cmwylie19/kubefs:0.0.1
 ```
 
 
