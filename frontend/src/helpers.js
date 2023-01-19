@@ -1,7 +1,8 @@
 import axios from "axios"
+import { BACKEND } from "./url";
 
 export const FetchPics = async (setPics) => {
-    axios.get('http://192.168.1.209:30099/list')
+    axios.get(`${BACKEND}/list`)
         .then(res => {
             res.data.map(pic => pic.Active = false)
             setPics(res.data.reverse())
@@ -30,14 +31,14 @@ export const SetUnActive = (name, pics, setPics) => {
 
 export const DeletePic = (e, path, pics, setPics, filterPics, date) => {
     if (e.detail === 2) {
-        axios.get('http://192.168.1.209:30099/delete/file' + path)
+        axios.get(`${BACKEND}/delete/file` + path)
             .then(res => {
                 if (res.data) {
                     setPics(pics.filter(pic => pic.Path !== path));
                 }
             })
     } else if (e.detail === 4) {
-        axios.get(`http://192.168.1.209:30099/delete/cascade?begin=${GetDateRange(filterPics(pics, date))[0]}&end=${GetDateRange(filterPics(pics, date))[1]}`)
+        axios.get(`${BACKEND}/delete/cascade?begin=${GetDateRange(filterPics(pics, date))[0]}&end=${GetDateRange(filterPics(pics, date))[1]}`)
             .then(res => {
                 if (res.data) {
                     setPics(pics.filter(pic => NameToDateInt(pic.Path) >= GetDateRange(filterPics(pics, date))[0] && NameToDateInt(pic.Path) <= GetDateRange(filterPics(pics, date))[1]));

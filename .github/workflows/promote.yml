@@ -45,24 +45,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set Env for CURRENT_TAG 
+        run: echo "CURRENT_TAG=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1' | sed 's/docker.io\/cmwylie19\/kubefs-web://g')" >> $GITHUB_ENV 
+
+     - name: Set Prod URL in Frontend source code
+       run: |
+         cp -f frontend/src/prod_url.js frontend/src/url.js
+
 
       - name: Copy server container tag
         if:  ${{ inputs.promote_container }}
         run: |
-          mv server/env/overlays/${{ inputs.source_env }}/version.yml server/env/overlays/${{ inputs.target_env }}/version.yml
+          mv server/env/overlays/${{ inputs.source_env }}/version.yaml server/env/overlays/${{ inputs.target_env }}/version.yaml
 
       - name: Copy frontend container tag
         if:  ${{ inputs.promote_container }}
         run: |
-          mv frontend/env/overlays/${{ inputs.source_env }}/version.yml frontend/env/overlays/${{ inputs.target_env }}/version.yml
+          mv frontend/env/overlays/${{ inputs.source_env }}/version.yaml frontend/env/overlays/${{ inputs.target_env }}/version.yaml
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./frontend
+          push: true
+          tags: cmwylie19/kubefs-web:${{ env.CURRENT_TAG }}
       # - name: Copy frontend container tag
       #   if:  ${{ inputs.promote_container }}
       #   uses: canastro/copy-file-action@master
       #   with:
-      #     source: "frontend/env/overlays/${{ inputs.source_env }}/version.yml"
-      #     target: "frontend/env/overlays/${{ inputs.target_env }}/version.yml"
+      #     source: "frontend/env/overlays/${{ inputs.source_env }}/version.yaml"
+      #     target: "frontend/env/overlays/${{ inputs.target_env }}/version.yaml"
 
         
       - uses: stefanzweifel/git-auto-commit-action@v4
