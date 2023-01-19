@@ -75,14 +75,6 @@ jobs:
         run: |
           cp -a frontend/src/stage_url.js frontend/src/url.js
 
-      - name: Build New Server Image with Tag
-        uses: docker/build-push-action@v2
-        with:
-          context: ./server/build
-          push: true
-          tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
-
-
       - name: Build New Frontend Image with Tag (Stage-URL)
         uses: docker/build-push-action@v2
         with:
@@ -100,6 +92,15 @@ jobs:
           context: ./frontend
           push: true
           tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
+
+
+      - name: Build New Server Image with Tag
+        uses: docker/build-push-action@v2
+        with:
+          context: ./server/build
+          push: true
+          tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
+
 
       - name: Update Server Image Tag in Stage
         run: | 
