@@ -2,7 +2,7 @@ name: On Tag
 
 on:
   push:
-    tags: ["*"]
+    tags: ["v*"]
   # workflow_run:
   #   workflows: ["Run Tests"]
   #   branches: [main]
@@ -37,7 +37,7 @@ jobs:
         echo "Exited with '$?'";
 
   build-images-and-patch:
-    needs: build-and-test
+    needs: unit-test
     name: build-images-and-patch
     runs-on: ubuntu-latest
     steps:
