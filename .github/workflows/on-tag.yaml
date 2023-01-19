@@ -94,7 +94,7 @@ jobs:
         cd server;
         GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
         mv kubefs build/kubefs
-        
+
       - name: Build New Server Image with Tag
         uses: docker/build-push-action@v2
         with:
