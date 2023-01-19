@@ -1,41 +1,36 @@
 name: On Tag
 
 on:
-  # create:
   push:
     tags: ["*"]
-  # workflow_run:
-  #   workflows: ["Run Tests"]
-  #   branches: [main]
-  #   types: 
-  #     - completed
+
 
 jobs:
-  # unit-test:
-  #   name: unit-test
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #   - uses: actions/checkout@v3
+  unit-test:
+    name: unit-test
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
 
-  #   - name: Set up Go
-  #     uses: actions/setup-go@v3
-  #     with:
-  #       go-version: 1.19
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
 
-  #   - name: Unit Test Server
-  #     run: |-
-  #       cd server;
-  #       ENV=CI go test -v ./...;
+    - name: Unit Test Server
+      run: |-
+        cd server;
+        ENV=CI go test -v ./...;
         
-  #   - name: Set up Node.js
-  #     uses: actions/setup-node@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
       
-  #   - name: Unit Test Frontend
-  #     run: |-
-  #       cd frontend;
-  #       yarn -s;
-  #       yarn run test-ci;
-  #       echo "Exited with '$?'";
+    - name: Unit Test Frontend
+      run: |-
+        cd frontend;
+        yarn -s;
+        yarn run test-ci;
+        echo "Exited with '$?'";
 
   build-images-and-patch:
     # needs: unit-test
@@ -76,30 +71,27 @@ jobs:
         run: |
           cp -a frontend/src/stage_url.js frontend/src/url.js
 
-      # - name: Build New Frontend Image with Tag (Stage-URL)
-      #   # uses: docker/build-push-action@v2
-      #   run: |
-      #     cd frontend;
-      #     docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage .;
-      #     docker push cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage
+      - name: Build New Frontend Image with Tag (Stage-URL)
+        # uses: docker/build-push-action@v2
+        run: |
+          cd frontend;
+          docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage .;
+          docker push cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage
         # with:
         #   context: ./frontend
         #   push: true
         #   tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage
         #   platforms: linux/arm64
 
-      # - name: Set URL to Prod for Frontend in Code
-      #   run: |
-      #     cp -a frontend/src/prod_url.js frontend/src/url.js
+      - name: Set URL to Prod for Frontend in Code
+        run: |
+          cp -a frontend/src/prod_url.js frontend/src/url.js
 
-      # - name: Build New Frontend Image with Tag (Prod)
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: ./frontend
-      #     push: true
-      #     tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
-      #     platforms: linux/arm64
-
+      - name: Build New Frontend Image with Tag (Prod-URL)
+        run: |
+          cd frontend;
+          docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }} .;
+          docker push cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
 
 
       - name: Build New Server Image with Tag
