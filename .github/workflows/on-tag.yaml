@@ -111,8 +111,7 @@ jobs:
         # uses: docker/build-push-action@v2
         run: |
           cd server;
-          GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-          mv kubefs build/kubefs
+
           docker build --platform linux/arm64 -t cmwylie19/kubefs:${{ env.RELEASE_VERSION }} build/;
           docker push cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
         # with:
