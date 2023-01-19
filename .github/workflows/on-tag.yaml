@@ -80,7 +80,8 @@ jobs:
         # uses: docker/build-push-action@v2
         run: |
           cd frontend;
-          docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage --push .
+          docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage .;
+          docker push cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage
         # with:
         #   context: ./frontend
         #   push: true
