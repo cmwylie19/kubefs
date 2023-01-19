@@ -101,73 +101,61 @@ jobs:
       #     platforms: linux/arm64
 
 
-      # - name: Build Server
-      #   run: |- 
-      #     cd server;
-      #     GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-      #     mv kubefs build/kubefs
 
       - name: Build New Server Image with Tag
-        # uses: docker/build-push-action@v2
-        
         run: |
           cd server;
-          # GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-          # mv kubefs build/kubefs
+
           docker build -t cmwylie19/kubefs:${{ env.RELEASE_VERSION }} build/;
           docker push cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
-        # with:
-        #   context: ./server/build
-        #   push: true
-        #   tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
-        #   platforms: linux/arm64
 
-      # - name: Update Server Image Tag in Stagegit
-      #   run: | 
-      #     IMAGE=$(cat server/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
-      #     NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION})
 
-      #     # Insert backslash
-      #     NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
-      #     IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
+      - name: Update Server Image Tag in Stagegit
+        run: | 
+          IMAGE=$(cat server/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
+          NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION})
+
+          # Insert backslash
+          NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
+          IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
 
 
 
-      #     sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yaml > server/env/overlays/stage/version1.yaml
-      #     mv server/env/overlays/stage/version1.yaml server/env/overlays/stage/version.yaml
+          sed "s/$IMAGE/$NEW_IMAGE/g" server/env/overlays/stage/version.yaml > server/env/overlays/stage/version1.yaml
+          mv server/env/overlays/stage/version1.yaml server/env/overlays/stage/version.yaml
 
-      # - name: Update Frontend Image Tag in Stage
-      #   run: | 
-      #     IMAGE=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
-      #     NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION}-stage)
+      - name: Update Frontend Image Tag in Stage
+        run: | 
+          IMAGE=$(cat frontend/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
+          NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION}-stage)
 
-      #     # Insert backslash
-      #     NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
-      #     IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
-
-
-
-      #     sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yaml > frontend/env/overlays/stage/version1.yaml
-      #     mv frontend/env/overlays/stage/version1.yaml frontend/env/overlays/stage/version.yaml
-
-      # - run: echo "🍏 This job's status is ${{ job.status }}."
+          # Insert backslash
+          NEW_IMAGE=$(echo "$NEW_IMAGE" | sed  's#/#\\/#g')
+          IMAGE=$(echo "$IMAGE" | sed  's#/#\\/#g')
 
 
-      # - name: Update frontend version in Git
-      #   run: |
-      #     git config --local user.email cmwylie19@gmail.com
-      #     git config --local user.name "Casey Wylie"
-      #     git add frontend/env/overlays/stage/version.yaml
-      #     git commit --allow-empty -m "[TASK] Bumping frontend image version"
-      #     git push origin HEAD:main --force
+
+          sed "s/$IMAGE/$NEW_IMAGE/g" frontend/env/overlays/stage/version.yaml > frontend/env/overlays/stage/version1.yaml
+          mv frontend/env/overlays/stage/version1.yaml frontend/env/overlays/stage/version.yaml
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
 
 
-      # - name: Update server version in Git
-      #   run: |- 
-      #     git config user.name "Casey Wylie"
-      #     git config user.email cmwylie19@gmail.com
-      #     git add server/env/overlays/stage/version.yaml
-      #     git commit --allow-empty -m '[TASK] Bumping server image version'
-      #     git push origin HEAD:main --force
-      #     git tag ${{ env.RELEASE_VERSION }} --force
-      #     git push origin HEAD:main --tags --force
+      - name: Update frontend version in Git
+        run: |
+          git config --local user.email cmwylie19@gmail.com
+          git config --local user.name "Casey Wylie"
+          git add frontend/env/overlays/stage/version.yaml
+          git commit --allow-empty -m "[TASK] Bumping frontend image version"
+          git push origin HEAD:main --force
+
+
+      - name: Update server version in Git
+        run: |- 
+          git config user.name "Casey Wylie"
+          git config user.email cmwylie19@gmail.com
+          git add server/env/overlays/stage/version.yaml
+          git commit --allow-empty -m '[TASK] Bumping server image version'
+          git push origin HEAD:main --force
+          git tag ${{ env.RELEASE_VERSION }} --force
+          git push origin HEAD:main --tags --force
