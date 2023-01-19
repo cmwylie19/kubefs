@@ -119,7 +119,7 @@ jobs:
         #   tags: cmwylie19/kubefs:${{ env.RELEASE_VERSION }}
         #   platforms: linux/arm64
 
-      # - name: Update Server Image Tag in Stage
+      # - name: Update Server Image Tag in Stagegit
       #   run: | 
       #     IMAGE=$(cat server/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
       #     NEW_IMAGE=$(echo ${IMAGE%:*}:${RELEASE_VERSION})
