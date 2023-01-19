@@ -91,11 +91,11 @@ jobs:
           tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
 
 
-    - name: Build Server
-      run: |- 
-        cd server;
-        GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
-        mv kubefs build/kubefs
+      - name: Build Server
+        run: |- 
+          cd server;
+          GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+          mv kubefs build/kubefs
 
       - name: Build New Server Image with Tag
         uses: docker/build-push-action@v2
