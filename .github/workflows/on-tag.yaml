@@ -10,7 +10,7 @@ on:
   #     - completed
 
 jobs:
-  build-and-test:
+  unit-test:
     name: build-and-test
     runs-on: ubuntu-22.04
     steps:
@@ -20,11 +20,6 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.19
-
-    - name: Build Server
-      run: |- 
-        cd server;
-        GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
 
     - name: Unit Test Server
       run: |-
@@ -94,6 +89,12 @@ jobs:
           tags: cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}
 
 
+    - name: Build Server
+      run: |- 
+        cd server;
+        GOARCH=arm64 GOOS=linux go build -o kubefs ./cmd/kubefs
+        mv kubefs build/kubefs
+        
       - name: Build New Server Image with Tag
         uses: docker/build-push-action@v2
         with:
