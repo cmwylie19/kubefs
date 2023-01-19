@@ -1,9 +1,9 @@
 name: On Tag
 
 on:
-  create:
-  # push:
-  #   tags: ["*"]
+  # create:
+  push:
+    tags: ["*"]
   # workflow_run:
   #   workflows: ["Run Tests"]
   #   branches: [main]
@@ -12,7 +12,7 @@ on:
 
 jobs:
   unit-test:
-    if: ${{ startsWith(github.ref, 'refs/tags/*') }}
+    # if: ${{ startsWith(github.ref, 'refs/tags/*') }}
     name: unit-test
     runs-on: ubuntu-22.04
     steps:
