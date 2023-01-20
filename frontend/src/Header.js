@@ -9,7 +9,7 @@ export const DisplayCount = (setTitle, count) => {
     return "total: "+count
 }
 export const Header = ({ date, setDate, count }) => {
-    const [color, setColor] = useState("purple");
+    const [color, setColor] = useState("Magenta");
     const [title, setTitle] = useState("Kube-FS")
     return <header className="header">
         <h1 role="title" onMouseDown={()=>DisplayCount(setTitle,count)} onMouseOver={()=>setColor("#"+Math.floor(Math.random()*16777215).toString(16))} style={{color:color}}>{title}</h1>
