@@ -83,7 +83,7 @@ jobs:
 
   build-prod-frontend:
     needs: unit-test
-    name: build-stage-frontend
+    name: build-prod-frontend
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -177,6 +177,11 @@ jobs:
     name: patch-push
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref_name }}
+          
       - name: Update Server Image Tag in Stagegit
         run: | 
           IMAGE=$(cat server/env/overlays/stage/version.yaml | egrep image: | sed 's/image: //g' | awk '{$1=$1};1')
