@@ -23,6 +23,7 @@ jobs:
         ENV=CI go test -v ./...;
         
     - name: Set up Node.js
+      if: success()
       uses: actions/setup-node@v3
       
     - name: Unit Test Frontend
@@ -60,6 +61,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set Env for RELEASE_VERSION
+        if: success()
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Test RELEASE_VERSION
@@ -73,6 +75,7 @@ jobs:
 
       - name: Build New Frontend Image with Tag (Stage-URL)
         # uses: docker/build-push-action@v2
+        if: success()
         run: |
           cd frontend;
           docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }}-stage .;
@@ -88,6 +91,7 @@ jobs:
           cp -a frontend/src/prod_url.js frontend/src/url.js
 
       - name: Build New Frontend Image with Tag (Prod-URL)
+        if: success()
         run: |
           cd frontend;
           docker build --platform linux/arm64 -t cmwylie19/kubefs-web:${{ env.RELEASE_VERSION }} .;
@@ -95,6 +99,7 @@ jobs:
 
 
       - name: Build New Server Image with Tag
+        if: success()
         run: |
           cd server;
 
