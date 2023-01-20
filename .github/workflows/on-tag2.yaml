@@ -130,7 +130,7 @@ jobs:
           
   build-server:
     needs: unit-test
-    name: build-images-and-patch
+    name: build-server
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -174,7 +174,7 @@ jobs:
 
   patch-push:
     needs: [unit-test, build-stage-frontend, build-prod-frontend, build-server]
-    name: build-images-and-patch
+    name: patch-push
     runs-on: ubuntu-latest
     steps:
       - name: Update Server Image Tag in Stagegit
