@@ -34,7 +34,7 @@ jobs:
         echo "Exited with '$?'";
 
   build-images-and-patch:
-    # needs: unit-test
+    needs: unit-test
     name: build-images-and-patch
     runs-on: ubuntu-latest
     steps:
