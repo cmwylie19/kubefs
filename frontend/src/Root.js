@@ -1,24 +1,36 @@
 import AppContainer from "./AppContainer";
-import { Header } from './Header';
-import Images from './Images';
-import { useState,useEffect } from 'react';
+import { Header } from "./Header";
+import Images from "./Images";
+import { useState, useEffect } from "react";
 import * as helpers from "./helpers";
 
-export default function Root () {
-    const [date, setDate] = useState("");
-    const [pics, setPics] = useState(null);
+export default function Root() {
+  const [date, setDate] = useState("");
+  const [pics, setPics] = useState(null);
+  const [version, setVersion] = useState("");
 
-    useEffect(() => {
+  // get version
+  useEffect(() => {
+    helpers.FetchVersion(setVersion);
+  }, []);
+
+  useEffect(() => {
+    helpers.FetchPics(setPics);
+    const interval = setInterval(() => {
       helpers.FetchPics(setPics);
-      const interval = setInterval(() => {
-        helpers.FetchPics(setPics);
-      }, 10000);
-      return () => clearInterval(interval);
-  
-    }, [date]);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [date]);
   return (
     <AppContainer
-      header={<Header date={date} setDate={setDate} count={Array.isArray(pics) ? pics.length : 0} />}
+      header={
+        <Header
+          version={version}
+          date={date}
+          setDate={setDate}
+          count={Array.isArray(pics) ? pics.length : 0}
+        />
+      }
       images={<Images date={date} pic={pics} setPics={setPics} />}
     />
   );

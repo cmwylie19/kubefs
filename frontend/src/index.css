@@ -1,17 +1,17 @@
 body {
   margin: 0;
-  font-family: 'Red Hat Mono', monospace;
+  font-family: "Red Hat Mono", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: 'Red Hat Mono', monospace;
+  font-family: "Red Hat Mono", monospace;
 }
 
 @font-face {
-  font-family: 'Red Hat Mono';
-  src: local('Red Hat Mono'), url(./fonts/RedHatMono-Medium.ttf) format('ttf');
+  font-family: "Red Hat Mono";
+  src: local("Red Hat Mono"), url(./fonts/RedHatMono-Medium.ttf) format("ttf");
   /* other formats include: 'woff2', 'truetype, 'opentype',
                             'embedded-opentype', and 'svg' */
 }

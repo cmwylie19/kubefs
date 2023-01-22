@@ -1,4 +1,4 @@
-import './AppContainer.css';
+import "./AppContainer.css";
 
 export default function AppContainer(props) {
   return (
@@ -8,4 +8,3 @@ export default function AppContainer(props) {
     </div>
   );
 }
-
