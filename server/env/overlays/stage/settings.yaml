@@ -1,0 +1,13 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubefs
+spec:
+  template:
+    spec:
+      containers:
+      - name: kubefs
+        env:
+        - name: VERSION
+          value: 0.0.1

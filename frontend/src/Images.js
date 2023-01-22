@@ -12,21 +12,33 @@ function Images({ date }) {
       helpers.FetchPics(setPics);
     }, 10000);
     return () => clearInterval(interval);
-
   }, [date]);
 
   return (
     <>
-      {helpers.FilterPics(pics, date) && helpers.FilterPics(pics, date).map((pic) =>
-        <img
-          alt={pic.Name}
-          className="image"
-          key={pic.Name}
-          src={BACKEND + pic.Path.replace("/media", "")}
-          onClick={(e) => helpers.DeletePic(e, pic.Path, pics, setPics, helpers.FilterPics, date)}
-          onMouseOver={() => helpers.SetActive(pic.Name, pics, setPics)}
-          onMouseOut={() => helpers.SetUnActive(pic.Name, pics, setPics)}
-        />)}
+      {helpers.FilterPics(pics, date) &&
+        helpers
+          .FilterPics(pics, date)
+          .map((pic) => (
+            <img
+              alt={pic.Name}
+              className="image"
+              key={pic.Name}
+              src={BACKEND + pic.Path.replace("/media", "")}
+              onClick={(e) =>
+                helpers.DeletePic(
+                  e,
+                  pic.Path,
+                  pics,
+                  setPics,
+                  helpers.FilterPics,
+                  date
+                )
+              }
+              onMouseOver={() => helpers.SetActive(pic.Name, pics, setPics)}
+              onMouseOut={() => helpers.SetUnActive(pic.Name, pics, setPics)}
+            />
+          ))}
     </>
   );
 }

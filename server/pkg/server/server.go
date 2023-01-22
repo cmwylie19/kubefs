@@ -22,6 +22,9 @@ func EnableCors(f http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
+type App struct {
+	Version string
+}
 type File struct {
 	Name string
 	Date string
@@ -144,6 +147,7 @@ func (s *Server) Serve(key, cert, dir, port string) error {
 	http.HandleFunc("/delete/file/", EnableCors(s.DeleteFile))
 	http.HandleFunc("/delete/cascade", EnableCors(s.CascadeDelete))
 	http.HandleFunc("/list", EnableCors(s.ListFiles))
+	http.HandleFunc("/version", EnableCors(VersionHandler))
 
 	if key != "" && cert != "" {
 		// fmt.Printf("Starting server at %s watching directory %s.\n", port, dir)
@@ -202,11 +206,19 @@ func (s *Server) ListFiles(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(file_list)
 }
 
+func VersionHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	utils.Logger.Info("Version Endpoint", zap.String("version", os.Getenv("VERSION")))
+	app := App{Version: os.Getenv("VERSION")}
+	json.NewEncoder(w).Encode(app)
+
+}
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	if os.Getenv("ENV") != "CI" {
-		utils.Logger.Info("Health check", zap.String("status", "OK"))
+		utils.Logger.Info("Health check Endpoint", zap.String("status", "OK"))
 	}
 
 	io.WriteString(w, `{"alive": true}`)
