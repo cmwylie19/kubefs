@@ -228,8 +228,8 @@ jobs:
         run: |
           git config --local user.email cmwylie19@gmail.com
           git config --local user.name "Casey Wylie"
-          git add frontend/env/overlays/stage/settings.yaml
-          git commit --allow-empty -m "[TASK] Bumping frontend image version to ${{ env.RELEASE_VERSION }}"
+          git add server/env/overlays/stage/settings.yaml
+          git commit --allow-empty -m "[TASK] Bumping server version to ${{ env.RELEASE_VERSION }} in the deployment"
           git push origin HEAD:main --force
 
 
