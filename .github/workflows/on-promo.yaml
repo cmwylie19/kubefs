@@ -57,7 +57,14 @@ jobs:
         with:
           source: "server/env/overlays/${{ inputs.source_env }}/version.yaml"
           target: "server/env/overlays/${{ inputs.target_env }}/version.yaml"
-       
+
+      - name: Copy Server settings
+        if:  ${{ inputs.promote_container }}
+        uses: canastro/copy-file-action@master
+        with:
+          source: "server/env/overlays/${{ inputs.source_env }}/settings.yaml"
+          target: "server/env/overlays/${{ inputs.target_env }}/settings.yaml"
+
       - name: Update Frontend Image Tag to remove Stage
         if: inputs.target_env == 'prod'
         run: | 
