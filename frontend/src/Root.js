@@ -8,6 +8,7 @@ export default function Root() {
   const [date, setDate] = useState("");
   const [pics, setPics] = useState(null);
   const [version, setVersion] = useState("");
+  const [theme, setTheme] = useState("light")
 
   // get version
   useEffect(() => {
@@ -23,15 +24,18 @@ export default function Root() {
   }, [date]);
   return (
     <AppContainer
+    theme={theme}
       header={
         <Header
+          theme={theme}
+          setTheme={setTheme}
           version={version}
           date={date}
           setDate={setDate}
           count={Array.isArray(pics) ? pics.length : 0}
         />
       }
-      images={<Images date={date} pic={pics} setPics={setPics} />}
+      images={<Images   theme="#333" date={date} pic={pics} setPics={setPics} />}
     />
   );
 }
