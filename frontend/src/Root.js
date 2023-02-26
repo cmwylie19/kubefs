@@ -8,7 +8,7 @@ export default function Root() {
   const [date, setDate] = useState("");
   const [pics, setPics] = useState(null);
   const [version, setVersion] = useState("");
-  const [theme, setTheme] = useState("light")
+  const [theme, setTheme] = useState("dark")
 
   // get version
   useEffect(() => {

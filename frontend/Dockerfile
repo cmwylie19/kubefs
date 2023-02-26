@@ -10,7 +10,7 @@ COPY . .
 RUN npm i && npm run build 
 
 # nginx state for serving content
-# FROM arm64v8/nginx
+# FROM nginx
 FROM arm64v8/nginx
 # Set working directory to nginx asset directory
 WORKDIR /usr/share/nginx/html
