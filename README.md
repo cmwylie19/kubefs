@@ -1,6 +1,6 @@
 # Kubefs
 ![frontend.png](frontend.png)
-This project is intended to manage files on a Kubernetes node (captured from an IP Camera and stored through FTP). It is cloud native and built to run in Kubernetes but can run on  a linux VM outside of Kubernetes. 
+KubeFS is a file system controller sitting on top of Kubernetes. It binds volumes of FTP files into pods enabling the user to quickly filter, delete, and manage said files. The frontend is setup to handle photos captured by IP Cameras, it can filter down to a given second, delete large groups of files simultaneously, and change color themes. KubeFS is cloud native and built to run in Kubernetes but can run on a linux VM outside of Kubernetes.
 
 - [Original Use case](#original-use-case)
 - [CLI](#cli)
