@@ -1,5 +1,6 @@
 # Kubefs
-![frontend.png](frontend.png)
+![frontend.png](frontend.png)  
+![frontend.png](frontend-dark.png)
 KubeFS is a file system controller sitting on top of Kubernetes. It binds volumes of FTP files into pods enabling the user to quickly filter, delete, and manage said files. The frontend is setup to handle photos captured by IP Cameras, it can filter down to a given second, delete large groups of files simultaneously, and change color themes. KubeFS is cloud native and built to run in Kubernetes but can run on a linux VM outside of Kubernetes.
 
 - [Original Use case](#original-use-case)
